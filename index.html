@@ -145,7 +145,22 @@
     font-weight:700;font-size:22px;color:var(--now);
     min-width:26px;text-align:right;line-height:1;
   }
-  .item-desc{font-size:13.5px;color:var(--muted);margin:0 0 14px 34px;line-height:1.55;}
+  .item-scenario{font-size:14px;color:var(--text);margin:2px 0 12px 34px;line-height:1.5;}
+  .anchors{margin:0 0 14px 34px;display:flex;flex-direction:column;gap:7px;}
+  .anchor{
+    display:flex;gap:9px;align-items:baseline;
+    font-size:13px;color:var(--muted);line-height:1.45;
+  }
+  .anchor-tag{
+    flex:none;
+    font-family:'Archivo Narrow',sans-serif;
+    font-weight:700;text-transform:uppercase;letter-spacing:0.06em;
+    font-size:10.5px;padding:2px 8px;border-radius:5px;
+    min-width:42px;text-align:center;
+  }
+  .tag-low{background:rgba(217,122,43,0.14);color:var(--start);}
+  .tag-high{background:rgba(15,158,142,0.14);color:var(--now);}
+  .anchor-high{color:var(--text);}
 
   input[type=range]{
     -webkit-appearance:none;appearance:none;
@@ -254,21 +269,37 @@
 <script>
 const AXES = [
   {short:"Problem framing",
-   desc:"A ticket lands — do you open Figma, or do you first ask what problem this actually solves and for whom? Low: you start drawing screens from the brief as written. High: you can restate the real user problem in one sentence, and you've caught requests that were solutions in disguise."},
+   scenario:"A ticket lands — do you open Figma, or first ask what problem this actually solves, and for whom?",
+   low:"You start drawing screens from the brief as written.",
+   high:"You can restate the real user problem in one sentence, and you catch requests that were solutions in disguise."},
   {short:"Stakeholder fluency",
-   desc:"Think of your main PM. Low: they're the person who hands you tickets, and you're not sure how their quarter is judged. High: you know what they're measured on, why briefs arrive solution-shaped, and you can disagree in a way that helps them — not just push back."},
+   scenario:"Think of your main PM and how well you understand their world.",
+   low:"They're the person who hands you tickets; you're not sure how their quarter is judged.",
+   high:"You know what they're measured on, why briefs arrive solution-shaped, and how to disagree in a way that helps them."},
   {short:"Fidelity judgement",
-   desc:"You're two days into exploring a direction. Low: you polish it before anyone sees it, because rough work feels unsafe to share. High: you send a sketch or grey-box flow early, on purpose, and ask for a reaction to the direction instead of approval of the pixels."},
+   scenario:"You're two days into exploring a direction. What do you show, and when?",
+   low:"You polish it before anyone sees it — rough work feels unsafe to share.",
+   high:"You send a sketch or grey-box flow early, on purpose, asking for a reaction to the direction, not approval of the pixels."},
   {short:"Evidence habit",
-   desc:"A design debate starts — 'users will find this confusing.' Low: it gets settled by whoever's most senior or most sure. High: you've watched five real people try the task, so you bring 'three of five got stuck here' instead of an opinion."},
+   scenario:"A design debate starts: 'users will find this confusing.' How does it get settled?",
+   low:"By whoever's most senior, or most sure.",
+   high:"You've watched five real people try the task, so you bring 'three of five got stuck here' instead of an opinion."},
   {short:"Prioritisation",
-   desc:"Two PMs both say 'urgent' on the same day. Low: you do both in the order they arrived and quietly become the bottleneck. High: you run a visible, shared priority list and can say 'this slots at #3 — here's what moves if it jumps.'"},
+   scenario:"Two PMs both say 'urgent' on the same day.",
+   low:"You do both in the order they arrived, and quietly become the bottleneck.",
+   high:"You run a visible, shared priority list and can say 'this slots at #3 — here's what moves if it jumps.'"},
   {short:"Recommending",
-   desc:"A stakeholder asks 'so what should we do?' Low: you answer with a question or lay out options and wait for them to choose. High: you bring options and a clear recommendation — 'I'd go with B, because…' — and name the trade-off you're accepting."},
+   scenario:"A stakeholder asks: 'so what should we do?'",
+   low:"You answer with a question, or lay out options and wait for them to choose.",
+   high:"You bring options and a clear recommendation — 'I'd go with B, because…' — and name the trade-off you're accepting."},
   {short:"Designing with AI",
-   desc:"AI tools are on your desk right now. Low: you avoid them, or paste in a request and ship whatever comes out. High: you direct them through the grunt work — synthesising notes, generating variations, building test prototypes — and keep the judgement for yourself."},
+   scenario:"AI tools are on your desk right now. How do you use them?",
+   low:"You avoid them, or paste in a request and ship whatever comes out.",
+   high:"You direct them through the grunt work — synthesis, variations, test prototypes — and keep the judgement for yourself."},
   {short:"Designing for AI",
-   desc:"You're asked to design an AI-powered feature. Low: you design the chat box and the happy path. High: you start from the data and what the model can actually do, design for when it's wrong, and build trust and safe approval into the flow."}
+   scenario:"You're asked to design an AI-powered feature.",
+   low:"You design the chat box and the happy path.",
+   high:"You start from the data and what the model can do, design for when it's wrong, and build trust and safe approval into the flow."}
 ];
 
 const N = AXES.length;
@@ -288,7 +319,11 @@ AXES.forEach((a,i)=>{
       <span class="item-name">${a.short}</span>
       <span class="val" id="val-${i}">3</span>
     </div>
-    <p class="item-desc">${a.desc}</p>
+    <p class="item-scenario">${a.scenario}</p>
+    <div class="anchors">
+      <div class="anchor anchor-low"><span class="anchor-tag tag-low">Low</span><span>${a.low}</span></div>
+      <div class="anchor anchor-high"><span class="anchor-tag tag-high">High</span><span>${a.high}</span></div>
+    </div>
     <input type="range" min="1" max="5" step="1" value="3" id="rng-${i}" aria-label="${a.short}">
     <div class="ticks"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>`;
   itemsEl.appendChild(item);
